@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Loop - Facturación</title>
+    <style>
+      :root {
+        --morado: #8a2be2;
+        --verde: #32cd32;
+        --amarillo: #ffd700;
+        --blanco: #ffffff;
+        --negro: #333333;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        background-color: #f9f9f9;
+        color: var(--negro);
+        line-height: 1.6;
+      }
+
+      .invoice-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 30px;
+        background: var(--blanco);
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #eee;
+      }
+
+      .invoice-title {
+        color: var(--morado);
+        font-size: 1.8rem;
+      }
+
+      .invoice-actions {
+        display: flex;
+        gap: 15px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-primary {
+        background-color: var(--morado);
+        color: var(--blanco);
+      }
+
+      .btn-secondary {
+        background-color: var(--amarillo);
+        color: var(--negro);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .invoice-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+
+      .invoice-section {
+        margin-bottom: 25px;
+      }
+
+      .section-title {
+        color: var(--verde);
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #555;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+
+      .invoice-items {
+        margin-top: 30px;
+      }
+
+      .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+
+      .items-table th {
+        background-color: var(--morado);
+        color: var(--blanco);
+        padding: 12px;
+        text-align: left;
+      }
+
+      .items-table td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .add-item-btn {
+        background-color: var(--verde);
+        color: var(--blanco);
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        margin-top: 10px;
+        cursor: pointer;
+      }
+
+      .invoice-summary {
+        background: #f8f8f8;
+        padding: 25px;
+        border-radius: 10px;
+        margin-top: 30px;
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
+
+      .summary-total {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: var(--morado);
+        border-top: 2px solid var(--morado);
+        padding-top: 10px;
+      }
+
+      .action-btn {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 5px;
+        font-size: 0.8rem;
+      }
+
+      .btn-cancel {
+        background-color: #dc3545;
+        color: var(--blanco);
+      }
+
+      @media (max-width: 768px) {
+        .invoice-body {
+          grid-template-columns: 1fr;
+        }
+
+        .invoice-header {
+          flex-direction: column;
+          gap: 20px;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-container">
+      <div class="invoice-header">
+        <h1 class="invoice-title">Datos de Facturación</h1>
+        <div class="invoice-actions">
+          <button class="btn btn-secondary" id="saveDraftBtn">
+            <i class="fas fa-save"></i> Guardar Borrador
+          </button>
+          <button class="btn btn-primary" id="generateInvoiceBtn">
+            <i class="fas fa-file-invoice"></i> Generar Factura
+          </button>
+        </div>
+      </div>
+
+      <div class="invoice-body">
+        <!-- Sección Datos Fiscales -->
+        <div class="invoice-section">
+          <h2 class="section-title">Información Fiscal</h2>
+
+          <div class="form-group">
+            <label for="taxName">Razón Social:</label>
+            <input type="text" id="taxName" required />
+          </div>
+
+          <div class="form-group">
+            <label for="rfc">RFC:</label>
+            <input type="text" id="rfc" placeholder="XAXX010101000" required />
+          </div>
+
+          <div class="form-group">
+            <label for="taxAddress">Domicilio Fiscal:</label>
+            <input type="text" id="taxAddress" required />
+          </div>
+
+          <div class="form-group">
+            <label for="taxRegime">Régimen Fiscal:</label>
+            <select id="taxRegime" required>
+              <option value="">Seleccionar</option>
+              <option value="601">General de Ley Personas Morales</option>
+              <option value="603">
+                Personas Morales con Fines no Lucrativos
+              </option>
+              <option value="605">Sueldos y Salarios</option>
+              <option value="606">Arrendamiento</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cfdiUse">Uso CFDI:</label>
+            <select id="cfdiUse" required>
+              <option value="">Seleccionar</option>
+              <option value="G03">Gastos en general</option>
+              <option value="P01">Por definir</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sección Datos de Contacto -->
+        <div class="invoice-section">
+          <h2 class="section-title">Contacto</h2>
+
+          <div class="form-group">
+            <label for="contactName">Nombre de Contacto:</label>
+            <input type="text" id="contactName" required />
+          </div>
+
+          <div class="form-group">
+            <label for="contactEmail">Correo Electrónico:</label>
+            <input type="email" id="contactEmail" required />
+          </div>
+
+          <div class="form-group">
+            <label for="contactPhone">Teléfono:</label>
+            <input type="tel" id="contactPhone" required />
+          </div>
+
+          <div class="form-group">
+            <label for="paymentMethod">Método de Pago:</label>
+            <select id="paymentMethod" required>
+              <option value="">Seleccionar</option>
+              <option value="transferencia">Transferencia Electrónica</option>
+              <option value="tarjeta">Tarjeta de Crédito/Débito</option>
+              <option value="efectivo">Efectivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Artículos -->
+      <div class="invoice-section invoice-items">
+        <h2 class="section-title">Artículos a Facturar</h2>
+
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Subtotal</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="itemsTableBody">
+            <!-- Filas generadas dinámicamente -->
+          </tbody>
+        </table>
+
+        <button class="add-item-btn" id="addItemBtn">
+          <i class="fas fa-plus"></i> Agregar Producto
+        </button>
+      </div>
+
+      <!-- Resumen -->
+      <div class="invoice-summary">
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="subtotalAmount">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>IVA (16%):</span>
+          <span id="taxAmount">$0.00</span>
+        </div>
+        <div class="summary-row summary-total">
+          <span>Total:</span>
+          <span id="totalAmount">$0.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Font Awesome para íconos -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <script>
+      // Datos de ejemplo
+      let invoiceItems = [];
+      let nextItemId = 1;
+
+      // Elementos DOM
+      const itemsTableBody = document.getElementById("itemsTableBody");
+      const addItemBtn = document.getElementById("addItemBtn");
+      const subtotalAmount = document.getElementById("subtotalAmount");
+      const taxAmount = document.getElementById("taxAmount");
+      const totalAmount = document.getElementById("totalAmount");
+      const generateInvoiceBtn = document.getElementById("generateInvoiceBtn");
+      const saveDraftBtn = document.getElementById("saveDraftBtn");
+      const contactEmail = document.getElementById("contactEmail");
+
+      // Función para renderizar artículos
+      function renderItems() {
+        itemsTableBody.innerHTML = invoiceItems
+          .map(
+            (item) => `
+                <tr data-id="${item.id}">
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>$${(item.price * item.quantity).toFixed(2)}</td>
+                    <td>
+                        <button class="action-btn btn-cancel delete-btn" data-id="${
+                          item.id
+                        }">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>
+            `
+          )
+          .join("");
+
+        // Agregar event listeners a los botones de eliminar
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const itemId = parseInt(this.getAttribute("data-id"));
+            deleteItem(itemId);
+          });
+        });
+
+        updateTotals();
+      }
+
+      // Función para eliminar un artículo
+      function deleteItem(itemId) {
+        invoiceItems = invoiceItems.filter((item) => item.id !== itemId);
+        renderItems();
+      }
+
+      // Función para actualizar totales
+      function updateTotals() {
+        const subtotal = invoiceItems.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const tax = subtotal * 0.16;
+        const total = subtotal + tax;
+
+        subtotalAmount.textContent = `$${subtotal.toFixed(2)}`;
+        taxAmount.textContent = `$${tax.toFixed(2)}`;
+        totalAmount.textContent = `$${total.toFixed(2)}`;
+      }
+
+      // Evento para agregar producto (simulado)
+      addItemBtn.addEventListener("click", () => {
+        const newItem = {
+          id: nextItemId++,
+          name: `Producto ${invoiceItems.length + 1}`,
+          quantity: 1,
+          price: 50 + Math.random() * 50,
+        };
+
+        invoiceItems.push(newItem);
+        renderItems();
+      });
+
+      // Generar factura
+      generateInvoiceBtn.addEventListener("click", () => {
+        if (invoiceItems.length === 0) {
+          alert("Agrega al menos un producto para facturar");
+          return;
+        }
+
+        if (!contactEmail.value) {
+          alert("Por favor ingresa un correo electrónico válido");
+          return;
+        }
+
+        // Simular envío de factura por correo
+        alert(
+          `Factura generada correctamente y enviada a: ${contactEmail.value}\nSerá redirigido al inicio.`
+        );
+
+        // Redirigir al inicio después de 2 segundos
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
+      });
+
+      // Guardar borrador
+      saveDraftBtn.addEventListener("click", () => {
+        alert("Borrador guardado correctamente");
+      });
+    </script>
+  </body>
+</html>
