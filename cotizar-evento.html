@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Loop - Cotización de Eventos</title>
+    <style>
+      :root {
+        --morado: #8a2be2;
+        --verde: #32cd32;
+        --amarillo: #ffd700;
+        --blanco: #ffffff;
+        --negro: #333333;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        background-color: #f9f9f9;
+        color: var(--negro);
+        line-height: 1.6;
+        padding-bottom: 50px;
+      }
+
+      header {
+        background: linear-gradient(135deg, var(--morado), var(--verde));
+        color: var(--blanco);
+        padding: 1rem;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      h1 {
+        color: var(--morado);
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .form-section {
+        background: var(--blanco);
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: var(--verde);
+        margin-bottom: 15px;
+        font-size: 1.3rem;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .checkbox-group {
+        margin: 15px 0;
+      }
+
+      .checkbox-option {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .checkbox-option input {
+        margin-right: 10px;
+      }
+
+      .candy-selection {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .candy-option {
+        border: 1px solid #eee;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .candy-option.selected {
+        border-color: var(--morado);
+        background-color: rgba(138, 43, 226, 0.1);
+      }
+
+      .candy-option img {
+        width: 100%;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-bottom: 8px;
+      }
+
+      .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 50px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 1rem;
+        display: block;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .btn-primary {
+        background-color: var(--amarillo);
+        color: var(--negro);
+      }
+
+      .btn-primary:hover {
+        background-color: #e6c200;
+      }
+
+      .btn-secondary {
+        background-color: var(--morado);
+        color: var(--blanco);
+      }
+
+      .btn-secondary:hover {
+        background-color: #7b1fa2;
+      }
+
+      .back-btn {
+        display: block;
+        width: 200px;
+        margin: 30px auto 0;
+        text-align: center;
+      }
+      <!--En el <style> agrega estos nuevos estilos: --> .checkbox-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        margin: 15px 0;
+      }
+
+      .checkbox-option {
+        display: flex;
+        align-items: center;
+        background: #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        transition: all 0.2s;
+      }
+
+      .checkbox-option:hover {
+        background: #f0f0f0;
+      }
+
+      .checkbox-option input {
+        margin-right: 10px;
+        min-width: 16px;
+        min-height: 16px;
+      }
+
+      /* Para pantallas pequeñas */
+      @media (max-width: 480px) {
+        .checkbox-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .candy-selection {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      /* Estilo mejorado para grupos de opciones */
+.options-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    background: rgba(138, 43, 226, 0.05); /* Fondo morado muy suave */
+    border: 1px solid rgba(138, 43, 226, 0.2); /* Borde sutil */
+    border-radius: 8px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.option-item:hover {
+    background: rgba(138, 43, 226, 0.1);
+    transform: translateY(-2px);
+}
+
+.option-item input {
+    margin-right: 12px;
+    min-width: 18px;
+    min-height: 18px;
+    accent-color: var(--morado); /* Color morado para el checkbox */
+}
+
+.option-item label {
+    font-weight: 500;
+    color: var(--negro);
+    cursor: pointer;
+}
+
+/* Para pantallas pequeñas - cambia a 1 columna */
+@media (max-width: 600px) {
+    .options-container {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Sweet Loop</div>
+      <p>Cotización para Eventos Especiales</p>
+    </header>
+
+    <div class="container">
+      <h1>¡Haz que tu evento sea inolvidable!</h1>
+
+      <form id="eventForm">
+        <!-- Sección Tipo de Evento -->
+        <div class="form-section">
+          <h2>1. Tipo de Evento</h2>
+          <div class="form-group">
+            <label for="eventType">Selecciona el tipo de evento:</label>
+            <select id="eventType" required>
+              <option value="">-- Selecciona --</option>
+              <option value="cumpleaños">Cumpleaños infantil</option>
+              <option value="fiesta">Fiesta temática</option>
+              <option value="boda">Boda</option>
+              <option value="baby-shower">Baby Shower</option>
+              <option value="empresarial">Evento empresarial</option>
+              <option value="graduacion">Graduación</option>
+              <option value="otro">Otro (especificar)</option>
+            </select>
+          </div>
+
+          <div
+            class="form-group"
+            id="otherEventContainer"
+            style="display: none"
+          >
+            <label for="otherEvent">Especifica el tipo de evento:</label>
+            <input type="text" id="otherEvent" />
+          </div>
+        </div>
+
+        <!-- Sección Temática y Decoración -->
+        <div class="form-section">
+          <h2>2. Temática y Decoración</h2>
+
+          <div class="form-group">
+            <label>Colores principales:</label>
+            <select id="colors" required>
+              <option value="">-- Selecciona --</option>
+              <option value="rosa-dorado">Rosa/Dorado</option>
+              <option value="azul-blanco">Azul/Blanco</option>
+              <option value="morado-verde">Morado/Verde</option>
+              <option value="rojo-negro">Rojo/Negro</option>
+              <option value="multicolor">Multicolor</option>
+            </select>
+          </div>
+
+<!-- Estilo decorativo -->
+<div class="form-group">
+    <label>Estilo decorativo:</label>
+    <div class="options-container">
+        <div class="option-item">
+            <input type="checkbox" id="elegante" name="style" value="elegante">
+            <label for="elegante">Elegante </label>
+        </div>
+        <div class="option-item">
+            <input type="checkbox" id="minimalista" name="style" value="minimalista">
+            <label for="minimalista">Minimalista</label>
+        </div>
+        <div class="option-item">
+            <input type="checkbox" id="colorido" name="style" value="colorido">
+            <label for="colorido">Colorido</label>
+        </div>
+        <div class="option-item">
+            <input type="checkbox" id="vintage" name="style" value="vintage">
+            <label for="vintage">Vintage</label>
+        </div>
+    </div>
+</div>
+<!-- Elementos adicionales -->
+<div class="form-group">
+    <label>Elementos adicionales (opcionales):</label>
+    <div class="options-container">
+        <div class="option-item">
+            <input type="checkbox" id="globos" name="extras" value="globos">
+            <label for="globos">Globos</label>
+        </div>
+        <div class="option-item">
+            <input type="checkbox" id="letreros" name="extras" value="letreros">
+            <label for="letreros">Letreros</label>
+        </div>
+        <div class="option-item">
+            <input type="checkbox" id="luces" name="extras" value="luces">
+            <label for="luces">Luces LED</label>
+        </div>
+        <div class="option-item">
+            <input type="checkbox" id="fondo" name="extras" value="fondo">
+            <label for="fondo">Fondo fotográfico</label>
+        </div>
+    </div>
+</div>
+        <!-- Sección Gomitas -->
+        <div class="form-section">
+          <h2>3. Selección de Gomitas</h2>
+          <p>
+            Elige hasta 3 tipos de gomitas (puedes seleccionar más con costo
+            adicional)
+          </p>
+
+          <div class="candy-selection" id="candySelection">
+            <!-- Las opciones se generarán con JavaScript -->
+          </div>
+        </div>
+
+        <!-- Sección Empaque -->
+        <div class="form-section">
+          <h2>4. Tipo de Empaque</h2>
+          <div class="form-group">
+            <label for="packaging"
+              >Selecciona cómo quieres presentar las gomitas:</label
+            >
+            <select id="packaging" required>
+              <option value="">-- Selecciona --</option>
+              <option value="bolsitas">Bolsitas individuales</option>
+              <option value="charolas">Charolas de cartón</option>
+              <option value="vasitos">Vasitos con tapa</option>
+              <option value="tematico">Empaque temático</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sección Invitados -->
+        <div class="form-section">
+          <h2>5. Cantidad de Invitados</h2>
+          <div class="form-group">
+            <label for="guests">Número aproximado de invitados:</label>
+            <select id="guests" required>
+              <option value="">-- Selecciona --</option>
+              <option value="menos-50">Menos de 50</option>
+              <option value="50-100">50-100</option>
+              <option value="mas-100">Más de 100</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="additionalGuests" style="display: none">
+            <label for="exactGuests"
+              >Número exacto (puedes aumentar de 25 en 25):</label
+            >
+            <input
+              type="number"
+              id="exactGuests"
+              min="25"
+              step="25"
+              value="125"
+            />
+          </div>
+        </div>
+
+        <!-- Sección Información del Evento -->
+        <div class="form-section">
+          <h2>6. Información del Evento</h2>
+
+          <div class="form-group">
+            <label for="name">Nombre completo:</label>
+            <input type="text" id="name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Teléfono de contacto:</label>
+            <input type="tel" id="phone" required />
+          </div>
+
+          <div class="form-group">
+            <label for="eventDate">Fecha del evento:</label>
+            <input type="date" id="eventDate" required />
+          </div>
+
+          <div class="form-group">
+            <label for="eventTime">Hora del evento:</label>
+            <input type="time" id="eventTime" required />
+          </div>
+
+          <div class="form-group">
+            <label for="eventLocation">Lugar del evento:</label>
+            <input type="text" id="eventLocation" required />
+          </div>
+
+          <div class="form-group">
+            <label for="comments">Detalles adicionales:</label>
+            <textarea
+              id="comments"
+              placeholder="Ej: Quiero luces de neón, mi tema es 'fiesta de unicornios'..."
+            ></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enviar cotización</button>
+      </form>
+
+      <a href="index.html" class="btn btn-secondary back-btn"
+        >← Volver al inicio</a
+      >
+    </div>
+
+    <script>
+      // Datos de gomitas
+      const candies = [
+        {
+          id: 1,
+          name: "Panditas",
+          image:
+            "https://i0.wp.com/tolucalabellacd.com/wp-content/uploads/2020/01/panditas-causan-hiperactividad-en-menores-de-edad-el-poder-del-consumidor.jpg?fit=3727%2C2480&ssl=1",
+        },
+        {
+          id: 2,
+          name: "Aros de durazno",
+          image:
+            "https://chedrauimx.vtexassets.com/arquivos/ids/45916186-1600-auto?v=638787809695600000&width=1600&height=auto&aspect=true",
+        },
+        {
+          id: 3,
+          name: "Serpientes",
+          image:
+            "https://www.superchuches.com/11472-large_default/gomitas-de-gusanitos.jpg",
+        },
+        {
+          id: 4,
+          name: "Xtreme",
+          image:
+            "https://http2.mlstatic.com/D_NQ_NP_2X_675403-MLU78149907884_082024-F.webp",
+        },
+        {
+          id: 5,
+          name: "Sin azúcar",
+          image:
+            "https://www.delou.com.mx/cdn/shop/files/1_f377f1ac-5d23-4324-9dd1-99fcd744446e.jpg?v=1740498896",
+        },
+        {
+          id: 6,
+          name: "Tropical Mix",
+          image: "https://m.media-amazon.com/images/I/71qShTnn1jL._SX679_.jpg",
+          
+        },
+      ];
+
+      // Variables de estado
+      let selectedCandies = [];
+
+      // Elementos DOM
+      const candySelectionEl = document.getElementById("candySelection");
+      const eventFormEl = document.getElementById("eventForm");
+      const eventTypeEl = document.getElementById("eventType");
+      const otherEventContainerEl = document.getElementById(
+        "otherEventContainer"
+      );
+      const guestsEl = document.getElementById("guests");
+      const additionalGuestsEl = document.getElementById("additionalGuests");
+
+      // Renderizar opciones de gomitas
+      function renderCandyOptions() {
+        candySelectionEl.innerHTML = candies
+          .map(
+            (candy) => `
+                <div class="candy-option" data-id="${candy.id}">
+                    <img src="${candy.image}" alt="${candy.name}">
+                    <p>${candy.name}</p>
+                </div>
+            `
+          )
+          .join("");
+
+        // Agregar event listeners
+        document.querySelectorAll(".candy-option").forEach((option) => {
+          option.addEventListener("click", (e) => {
+            const candyId = parseInt(e.currentTarget.getAttribute("data-id"));
+            toggleCandySelection(candyId);
+          });
+        });
+      }
+
+      // Seleccionar/deseleccionar gomita
+      function toggleCandySelection(candyId) {
+        const optionEl = document.querySelector(
+          `.candy-option[data-id="${candyId}"]`
+        );
+        const index = selectedCandies.indexOf(candyId);
+
+        if (index === -1) {
+          if (selectedCandies.length >= 3) {
+            alert(
+              "Has seleccionado 3 gomitas. Puedes agregar más con costo adicional."
+            );
+            return;
+          }
+          selectedCandies.push(candyId);
+          optionEl.classList.add("selected");
+        } else {
+          selectedCandies.splice(index, 1);
+          optionEl.classList.remove("selected");
+        }
+      }
+
+      // Event listeners
+      eventTypeEl.addEventListener("change", (e) => {
+        otherEventContainerEl.style.display =
+          e.target.value === "otro" ? "block" : "none";
+      });
+
+      guestsEl.addEventListener("change", (e) => {
+        additionalGuestsEl.style.display =
+          e.target.value === "mas-100" ? "block" : "none";
+      });
+
+      // Enviar formulario
+      eventFormEl.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Validar selección de gomitas
+        if (selectedCandies.length === 0) {
+          alert("Por favor selecciona al menos un tipo de gomita");
+          return;
+        }
+
+        // Recopilar datos del formulario
+        const formData = {
+          eventType:
+            eventTypeEl.value === "otro"
+              ? document.getElementById("otherEvent").value
+              : eventTypeEl.options[eventTypeEl.selectedIndex].text,
+          colors: document.getElementById("colors").value,
+          styles: Array.from(
+            document.querySelectorAll('input[name="style"]:checked')
+          ).map((el) => el.value),
+          extras: Array.from(
+            document.querySelectorAll('input[name="extras"]:checked')
+          ).map((el) => el.value),
+          candies: selectedCandies.map(
+            (id) => candies.find((c) => c.id === id).name
+          ),
+          packaging:
+            document.getElementById("packaging").options[
+              document.getElementById("packaging").selectedIndex
+            ].text,
+          guests:
+            guestsEl.value === "mas-100"
+              ? document.getElementById("exactGuests").value
+              : guestsEl.options[guestsEl.selectedIndex].text,
+          contactInfo: {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+          },
+          eventDetails: {
+            date: document.getElementById("eventDate").value,
+            time: document.getElementById("eventTime").value,
+            location: document.getElementById("eventLocation").value,
+            comments: document.getElementById("comments").value,
+          },
+          timestamp: new Date().toISOString(),
+        };
+
+        // Guardar cotización (simulación)
+        saveQuote(formData);
+
+        // Mostrar confirmación
+        alert(
+          "¡Cotización enviada con éxito! Nos pondremos en contacto contigo en menos de 24 horas."
+        );
+
+        // Resetear formulario
+        eventFormEl.reset();
+        selectedCandies = [];
+        document
+          .querySelectorAll(".candy-option")
+          .forEach((el) => el.classList.remove("selected"));
+      });
+
+      // Guardar cotización (simulación)
+      function saveQuote(quote) {
+        const quotes = JSON.parse(
+          localStorage.getItem("sweetLoopQuotes") || "[]"
+        );
+        quotes.push(quote);
+        localStorage.setItem("sweetLoopQuotes", JSON.stringify(quotes));
+      }
+
+      // Inicializar
+      renderCandyOptions();
+    </script>
+  </body>
+</html>
