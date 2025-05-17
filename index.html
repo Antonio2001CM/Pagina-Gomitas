@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sweet Loop - Gomitas Personalizadas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
       :root {
         --morado: #8a2be2;
@@ -24,20 +25,45 @@
         background-color: #f9f9f9;
         color: var(--negro);
         line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
       }
 
       header {
         background: linear-gradient(135deg, var(--morado), var(--verde));
         color: var(--blanco);
-        padding: 1rem;
+        padding: 1.5rem 1rem;
         text-align: center;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
 
-      .logo {
+      .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 0.5rem;
+      }
+
+      .logo-img {
+        height: 60px;
+        width: auto;
+      }
+
+      .logo-text {
         font-size: 2rem;
         font-weight: bold;
-        margin-bottom: 0.5rem;
+      }
+
+      .header-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .main-content {
+        flex: 1;
+        padding-bottom: 2rem;
       }
 
       .main-buttons {
@@ -46,6 +72,8 @@
         gap: 1rem;
         margin: 2rem auto;
         flex-wrap: wrap;
+        max-width: 800px;
+        padding: 0 1rem;
       }
 
       .btn {
@@ -85,6 +113,7 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+        z-index: 999;
       }
 
       .fixed-btn {
@@ -99,20 +128,26 @@
         font-size: 1.2rem;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .fixed-btn:hover {
+        transform: scale(1.1);
       }
 
       footer {
         background-color: var(--negro);
         color: var(--blanco);
         text-align: center;
-        padding: 1rem;
-        margin-top: 2rem;
+        padding: 1.2rem;
+        margin-top: auto;
+        width: 100%;
       }
 
       /* Estilos para páginas */
       .page {
         display: none;
-        padding: 2rem;
+        padding: 2rem 1rem;
         max-width: 1000px;
         margin: 0 auto;
       }
@@ -235,153 +270,197 @@
           font-size: 0.7rem;
           padding: 6px 12px;
         }
-      }
-      @media (max-width: 768px) {
+        
+        .logo-container {
+          flex-direction: column;
+          gap: 10px;
+        }
+        
+        .logo-text {
+          font-size: 1.8rem;
+        }
+        
+        .header-subtitle {
+          font-size: 1rem;
+        }
+        
         .main-buttons {
           flex-direction: column;
           align-items: center;
         }
 
         .btn {
-          width: 80%;
+          width: 90%;
+          max-width: 300px;
         }
 
         .order-card .btn {
           width: 100%;
+        }
+        
+        .page {
+          padding: 1.5rem 1rem;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .logo-img {
+          height: 50px;
+        }
+        
+        .logo-text {
+          font-size: 1.6rem;
+        }
+        
+        .fixed-buttons {
+          bottom: 15px;
+          right: 15px;
+        }
+        
+        .fixed-btn {
+          width: 45px;
+          height: 45px;
+          font-size: 1.1rem;
         }
       }
     </style>
   </head>
   <body>
     <header>
-      <div class="logo">Sweet Loop</div>
-      <p>Gomitas personalizadas y decoración para eventos</p>
+      <div class="logo-container">
+        <img src="sweet_loop_transparent (1).png" alt="Sweet Loop Logo" class="logo-img">
+        <div class="logo-text">Sweet Loop</div>
+      </div>
+      <p class="header-subtitle">Gomitas personalizadas y decoración para eventos</p>
     </header>
-    <!-- Página login admin -->
-    <button class="admin-access-btn" id="adminAccessBtn">
-      <i class="fas fa-lock"></i> Admin
-    </button>
+    
+    <div class="main-content">
+      <!-- Página login admin -->
+      <button class="admin-access-btn" id="adminAccessBtn">
+        <i class="fas fa-lock"></i> Admin
+      </button>
 
-    <!-- Página Principal -->
-    <div class="page active" id="home">
-      <div class="main-buttons">
-        <button class="btn btn-primary" id="startOrder">
-          Iniciar un pedido o servicio
-        </button>
-        <button class="btn btn-secondary" id="aboutUs">¿Quiénes somos?</button>
-      </div>
-    </div>
-
-    <!-- Página "Quiénes somos" -->
-    <div class="page" id="about">
-      <h1 class="about-title">¿Quiénes somos?</h1>
-      <p style="text-align: center; margin-bottom: 2rem">
-        Sweet Loop es una empresa dedicada a crear experiencias dulces y
-        memorables a través de nuestras gomitas artesanales y servicios de
-        decoración para eventos.
-      </p>
-
-      <div class="accordion">
-        <div class="accordion-header">
-          <span>Misión y Visión</span>
-          <span>+</span>
+      <!-- Página Principal -->
+      <div class="page active" id="home">
+        <div class="main-buttons">
+          <button class="btn btn-primary" id="startOrder">
+            Iniciar un pedido o servicio
+          </button>
+          <button class="btn btn-secondary" id="aboutUs">¿Quiénes somos?</button>
         </div>
-        <div class="accordion-content">
-          <div class="accordion-content-inner">
-            <h3>Misión</h3>
-            <p>
-              "Deleitar a nuestros clientes en sus eventos especiales ofreciendo
-              una experiencia dulce y personalizada, con productos de alta
-              calidad y un firme compromiso con la sostenibilidad a través de
-              empaques innovadores y ecológicos."
-            </p>
+      </div>
 
-            <h3>Visión</h3>
-            <p>
-              "Ser la dulcería líder en el mercado de eventos, reconocida por
-              nuestra creatividad, calidad en los productos y nuestro compromiso
-              ambiental, expandiendo nuestra presencia nivel regional y siendo
-              un referente en prácticas sostenibles dentro de la industria."
-            </p>
+      <!-- Página "Quiénes somos" -->
+      <div class="page" id="about">
+        <h1 class="about-title">¿Quiénes somos?</h1>
+        <p style="text-align: center; margin-bottom: 2rem">
+          Sweet Loop es una empresa dedicada a crear experiencias dulces y
+          memorables a través de nuestras gomitas artesanales y servicios de
+          decoración para eventos.
+        </p>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            <span>Misión y Visión</span>
+            <span>+</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">
+              <h3>Misión</h3>
+              <p>
+                "Deleitar a nuestros clientes en sus eventos especiales ofreciendo
+                una experiencia dulce y personalizada, con productos de alta
+                calidad y un firme compromiso con la sostenibilidad a través de
+                empaques innovadores y ecológicos."
+              </p>
+
+              <h3>Visión</h3>
+              <p>
+                "Ser la dulcería líder en el mercado de eventos, reconocida por
+                nuestra creatividad, calidad en los productos y nuestro compromiso
+                ambiental, expandiendo nuestra presencia nivel regional y siendo
+                un referente en prácticas sostenibles dentro de la industria."
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="accordion">
-        <div class="accordion-header">
-          <span>Valores</span>
-          <span>+</span>
-        </div>
-        <div class="accordion-content">
-          <div class="accordion-content-inner">
-            <ul>
-              <li>
-                <strong>Calidad:</strong> Ofrecer productos frescos y
-                deliciosos, elaborados con ingredientes de primera.
-              </li>
-              <li>
-                <strong>Sostenibilidad:</strong> Minimizar nuestro impacto
-                ambiental mediante el uso de empaques biodegradables y la
-                búsqueda de prácticas ecológicas.
-              </li>
-              <li>
-                <strong>Innovación:</strong> Buscar constantemente nuevas ideas
-                en productos, presentaciones y procesos, incluyendo nuestra
-                plataforma en línea.
-              </li>
-              <li>
-                <strong>Personalización:</strong> Adaptarnos a las necesidades y
-                gustos específicos de cada cliente para crear experiencias
-                únicas.
-              </li>
-              <li>
-                <strong>Servicio al Cliente:</strong> Brindar una atención
-                amable, eficiente y personalizada en cada interacción.
-              </li>
-              <li>
-                <strong>Responsabilidad Social:</strong> Contribuir
-                positivamente a la comunidad y al medio ambiente.
-              </li>
-            </ul>
+        <div class="accordion">
+          <div class="accordion-header">
+            <span>Valores</span>
+            <span>+</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">
+              <ul>
+                <li>
+                  <strong>Calidad:</strong> Ofrecer productos frescos y
+                  deliciosos, elaborados con ingredientes de primera.
+                </li>
+                <li>
+                  <strong>Sostenibilidad:</strong> Minimizar nuestro impacto
+                  ambiental mediante el uso de empaques biodegradables y la
+                  búsqueda de prácticas ecológicas.
+                </li>
+                <li>
+                  <strong>Innovación:</strong> Buscar constantemente nuevas ideas
+                  en productos, presentaciones y procesos, incluyendo nuestra
+                  plataforma en línea.
+                </li>
+                <li>
+                  <strong>Personalización:</strong> Adaptarnos a las necesidades y
+                  gustos específicos de cada cliente para crear experiencias
+                  únicas.
+                </li>
+                <li>
+                  <strong>Servicio al Cliente:</strong> Brindar una atención
+                  amable, eficiente y personalizada en cada interacción.
+                </li>
+                <li>
+                  <strong>Responsabilidad Social:</strong> Contribuir
+                  positivamente a la comunidad y al medio ambiente.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
+
+        <button class="btn back-btn" id="backHome">Volver al inicio</button>
       </div>
 
-      <button class="btn back-btn" id="backHome">Volver al inicio</button>
-    </div>
+      <!-- Página "Iniciar pedido o servicio" -->
+      <div class="page" id="order">
+        <h1 style="text-align: center; color: var(--morado); margin-bottom: 2rem">
+          Selecciona tu opción
+        </h1>
 
-    <!-- Página "Iniciar pedido o servicio" -->
-    <div class="page" id="order">
-      <h1 style="text-align: center; color: var(--morado); margin-bottom: 2rem">
-        Selecciona tu opción
-      </h1>
+        <div class="order-options">
+          <div class="order-card">
+            <h2>Pedido de Gomitas</h2>
+            <p>
+              Selecciona entre nuestra variedad de gomitas artesanales, elige tu
+              gramaje y empaque preferido. Personaliza tu pedido a tu gusto.
+            </p>
+            <button class="btn btn-primary" id="candyOrder">
+              Iniciar Pedido
+            </button>
+          </div>
 
-      <div class="order-options">
-        <div class="order-card">
-          <h2>Pedido de Gomitas</h2>
-          <p>
-            Selecciona entre nuestra variedad de gomitas artesanales, elige tu
-            gramaje y empaque preferido. Personaliza tu pedido a tu gusto.
-          </p>
-          <button class="btn btn-primary" id="candyOrder">
-            Iniciar Pedido
-          </button>
+          <div class="order-card">
+            <h2>Organizar tu Evento</h2>
+            <p>
+              ¡Haz que tu evento sea inolvidable con nuestro servicio de
+              decoración y carrito de gomitas personalizado! Cotiza tu evento
+              especial.
+            </p>
+            <button class="btn btn-tertiary" id="eventOrder">
+              Cotizar Evento
+            </button>
+          </div>
         </div>
 
-        <div class="order-card">
-          <h2>Organizar tu Evento</h2>
-          <p>
-            ¡Haz que tu evento sea inolvidable con nuestro servicio de
-            decoración y carrito de gomitas personalizado! Cotiza tu evento
-            especial.
-          </p>
-          <button class="btn btn-tertiary" id="eventOrder">
-            Cotizar Evento
-          </button>
-        </div>
+        <button class="btn back-btn" id="backHome2">Volver al inicio</button>
       </div>
-
-      <button class="btn back-btn" id="backHome2">Volver al inicio</button>
     </div>
 
     <div class="fixed-buttons">
@@ -456,4 +535,5 @@
         });
     </script>
   </body>
+</html>
 </html>
