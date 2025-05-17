@@ -167,13 +167,15 @@
         color: var(--verde);
       }
 
-      /* Tablas */
+      /* Tablas - Solo scroll vertical */
       .table-container {
-        overflow-x: auto;
+        overflow-x: auto; /* Scroll horizontal original */
         margin-bottom: 30px;
         border-radius: 10px;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         background: var(--blanco);
+        max-height: 500px; /* Altura máxima para el scroll vertical */
+        overflow-y: auto; /* Scroll vertical */
       }
 
       .data-table {
@@ -193,7 +195,7 @@
         background-color: var(--morado);
         color: var(--blanco);
         position: sticky;
-        top: 60px;
+        top: 0;
       }
 
       .data-table tr:hover {
@@ -389,6 +391,10 @@
         .overlay.active {
           display: block;
         }
+
+        .table-container {
+          max-height: 400px;
+        }
       }
 
       @media (max-width: 768px) {
@@ -416,6 +422,10 @@
         .btn {
           width: 100%;
           justify-content: center;
+        }
+
+        .table-container {
+          max-height: 350px;
         }
       }
 
@@ -467,6 +477,10 @@
         .form-row {
           grid-template-columns: 1fr;
           gap: 15px;
+        }
+
+        .table-container {
+          max-height: 300px;
         }
       }
     </style>
@@ -544,7 +558,7 @@
           </div>
         </div>
 
-        <!-- Tabla de pedidos recientes -->
+        <!-- Tabla de pedidos recientes - Scroll vertical solamente -->
         <h3 class="section-title"><i class="fas fa-clock"></i> Pedidos Recientes</h3>
         <div class="table-container">
           <table class="data-table">
@@ -596,6 +610,58 @@
                 <td>$120.00</td>
                 <td>13/05/2023</td>
                 <td><span class="status status-cancelled">Cancelado</span></td>
+                <td>
+                  <button class="action-btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>#SL-0998</td>
+                <td>Luis Rodríguez</td>
+                <td>Mezcla Especial (1kg), Caja</td>
+                <td>$210.00</td>
+                <td>12/05/2023</td>
+                <td><span class="status status-completed">Completado</span></td>
+                <td>
+                  <button class="action-btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>#SL-0997</td>
+                <td>Pedro Fernández</td>
+                <td>Gomitas Ácidas (300g), Bolsa</td>
+                <td>$95.00</td>
+                <td>11/05/2023</td>
+                <td><span class="status status-completed">Completado</span></td>
+                <td>
+                  <button class="action-btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>#SL-0996</td>
+                <td>Laura Jiménez</td>
+                <td>Gomitas de Fresa (400g), Caja</td>
+                <td>$130.00</td>
+                <td>10/05/2023</td>
+                <td><span class="status status-completed">Completado</span></td>
+                <td>
+                  <button class="action-btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>#SL-0995</td>
+                <td>Jorge Ramírez</td>
+                <td>Mezcla Tropical (500g), Bolsa</td>
+                <td>$160.00</td>
+                <td>09/05/2023</td>
+                <td><span class="status status-completed">Completado</span></td>
                 <td>
                   <button class="action-btn btn-edit">
                     <i class="fas fa-edit"></i> Editar
