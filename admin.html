@@ -82,7 +82,8 @@
         width: 250px;
         padding: 20px;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s;
+        transition: transform 0.3s ease-out;
+        z-index: 90;
       }
 
       .admin-menu {
@@ -123,6 +124,7 @@
         flex: 1;
         padding: 25px;
         overflow-x: auto;
+        transition: margin-left 0.3s;
       }
 
       .section-title {
@@ -342,6 +344,18 @@
         color: var(--blanco);
         font-size: 1.5rem;
         cursor: pointer;
+        padding: 5px;
+      }
+
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 80;
       }
 
       /* Responsive */
@@ -352,8 +366,6 @@
           left: 0;
           bottom: 0;
           transform: translateX(-100%);
-          z-index: 90;
-          background: var(--blanco);
           width: 280px;
         }
 
@@ -372,6 +384,10 @@
 
         .summary-cards {
           grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+
+        .overlay.active {
+          display: block;
         }
       }
 
@@ -467,6 +483,9 @@
       </button>
     </header>
 
+    <!-- Overlay para menú móvil -->
+    <div class="overlay" id="overlay"></div>
+
     <!-- Contenedor principal -->
     <div class="admin-container">
       <!-- Sidebar -->
@@ -502,7 +521,7 @@
       </nav>
 
       <!-- Contenido principal -->
-      <main class="admin-content">
+      <main class="admin-content" id="mainContent">
         <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Resumen General</h2>
 
         <!-- Tarjetas resumen -->
@@ -583,19 +602,6 @@
                   </button>
                 </td>
               </tr>
-              <tr>
-                <td>#SL-0998</td>
-                <td>Luis Rodríguez</td>
-                <td>Mezcla Especial (1kg), Caja</td>
-                <td>$210.00</td>
-                <td>12/05/2023</td>
-                <td><span class="status status-completed">Completado</span></td>
-                <td>
-                  <button class="action-btn btn-edit">
-                    <i class="fas fa-edit"></i> Editar
-                  </button>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -654,12 +660,29 @@
     </div>
 
     <script>
-      // Menú móvil
+      // Elementos del DOM
       const menuBtn = document.getElementById('menuBtn');
       const sidebar = document.getElementById('sidebar');
-      
-      menuBtn.addEventListener('click', () => {
+      const overlay = document.getElementById('overlay');
+      const mainContent = document.getElementById('mainContent');
+
+      // Función para alternar el menú
+      function toggleMenu() {
         sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+      }
+
+      // Evento para el botón del menú
+      menuBtn.addEventListener('click', toggleMenu);
+
+      // Evento para cerrar el menú al hacer clic en el overlay
+      overlay.addEventListener('click', toggleMenu);
+
+      // Evento para cerrar el menú al hacer clic en el contenido principal
+      mainContent.addEventListener('click', function() {
+        if (window.innerWidth <= 1024 && sidebar.classList.contains('active')) {
+          toggleMenu();
+        }
       });
 
       // Cerrar sesión
@@ -689,13 +712,6 @@
 
       document.getElementById('cancelBtn').addEventListener('click', function() {
         document.getElementById('productForm').reset();
-      });
-
-      // Cerrar menú al hacer clic fuera en móviles
-      document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 1024 && !sidebar.contains(e.target) && e.target !== menuBtn) {
-          sidebar.classList.remove('active');
-        }
       });
     </script>
   </body>
