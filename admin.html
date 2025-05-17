@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sweet Loop - Panel Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
       :root {
         --morado: #8a2be2;
@@ -12,6 +13,8 @@
         --blanco: #ffffff;
         --negro: #333333;
         --gris: #f5f5f5;
+        --rojo: #dc3545;
+        --gris-oscuro: #e0e0e0;
       }
 
       * {
@@ -24,6 +27,7 @@
       body {
         background-color: var(--gris);
         color: var(--negro);
+        line-height: 1.6;
       }
 
       /* Header del panel */
@@ -35,10 +39,16 @@
         justify-content: space-between;
         align-items: center;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
       }
 
       .admin-header h1 {
         font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
 
       .logout-btn {
@@ -49,20 +59,30 @@
         border-radius: 5px;
         cursor: pointer;
         font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+      }
+
+      .logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
       }
 
       /* Contenedor principal */
       .admin-container {
-        display: grid;
-        grid-template-columns: 250px 1fr;
-        min-height: 100vh;
+        display: flex;
+        min-height: calc(100vh - 60px);
       }
 
       /* Sidebar */
       .admin-sidebar {
         background-color: var(--blanco);
+        width: 250px;
         padding: 20px;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s;
       }
 
       .admin-menu {
@@ -71,17 +91,18 @@
       }
 
       .admin-menu li {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
       }
 
       .admin-menu a {
         display: flex;
         align-items: center;
-        padding: 10px;
+        padding: 12px 10px;
         color: var(--negro);
         text-decoration: none;
         border-radius: 5px;
         transition: all 0.3s;
+        font-size: 0.95rem;
       }
 
       .admin-menu a:hover,
@@ -92,18 +113,30 @@
 
       .admin-menu i {
         margin-right: 10px;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
       }
 
       /* Contenido principal */
       .admin-content {
-        padding: 30px;
+        flex: 1;
+        padding: 25px;
+        overflow-x: auto;
+      }
+
+      .section-title {
+        color: var(--morado);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
 
       /* Tarjetas resumen */
       .summary-cards {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 20px;
         margin-bottom: 30px;
       }
@@ -113,12 +146,17 @@
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s;
+      }
+
+      .summary-card:hover {
+        transform: translateY(-5px);
       }
 
       .summary-card h3 {
         color: var(--morado);
         margin-bottom: 10px;
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
 
       .summary-card p {
@@ -128,25 +166,32 @@
       }
 
       /* Tablas */
+      .table-container {
+        overflow-x: auto;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        background: var(--blanco);
+      }
+
       .data-table {
         width: 100%;
         border-collapse: collapse;
-        background: var(--blanco);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        min-width: 800px;
       }
 
       .data-table th,
       .data-table td {
         padding: 15px;
         text-align: left;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--gris-oscuro);
       }
 
       .data-table th {
         background-color: var(--morado);
         color: var(--blanco);
+        position: sticky;
+        top: 60px;
       }
 
       .data-table tr:hover {
@@ -155,9 +200,9 @@
 
       .status {
         display: inline-block;
-        padding: 5px 10px;
+        padding: 5px 12px;
         border-radius: 20px;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         font-weight: bold;
       }
 
@@ -177,12 +222,21 @@
       }
 
       .action-btn {
-        padding: 5px 10px;
+        padding: 8px 12px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         margin-right: 5px;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s;
+      }
+
+      .action-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
       }
 
       .btn-edit {
@@ -196,7 +250,7 @@
       }
 
       .btn-cancel {
-        background-color: #dc3545;
+        background-color: var(--rojo);
         color: var(--blanco);
       }
 
@@ -211,7 +265,7 @@
 
       .form-row {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 20px;
         margin-bottom: 20px;
       }
@@ -224,50 +278,191 @@
         display: block;
         margin-bottom: 8px;
         font-weight: bold;
+        font-size: 0.95rem;
       }
 
       .form-group input,
       .form-group select,
       .form-group textarea {
         width: 100%;
-        padding: 10px;
+        padding: 12px;
         border: 1px solid #ddd;
-        border-radius: 5px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: border 0.3s;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: var(--morado);
+        outline: none;
+      }
+
+      .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
       }
 
       .form-actions {
         display: flex;
         justify-content: flex-end;
-        gap: 10px;
-        margin-top: 20px;
+        gap: 15px;
+        margin-top: 25px;
+      }
+
+      .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background-color: var(--morado);
+        color: var(--blanco);
+      }
+
+      .btn-secondary {
+        background-color: var(--gris-oscuro);
+        color: var(--negro);
+      }
+
+      /* Menú móvil */
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--blanco);
+        font-size: 1.5rem;
+        cursor: pointer;
       }
 
       /* Responsive */
-      @media (max-width: 992px) {
-        .admin-container {
-          grid-template-columns: 1fr;
+      @media (max-width: 1024px) {
+        .admin-sidebar {
+          position: fixed;
+          top: 60px;
+          left: 0;
+          bottom: 0;
+          transform: translateX(-100%);
+          z-index: 90;
+          background: var(--blanco);
+          width: 280px;
         }
 
-        .admin-sidebar {
-          display: none;
+        .admin-sidebar.active {
+          transform: translateX(0);
+        }
+
+        .admin-content {
+          margin-left: 0;
+          padding: 20px 15px;
+        }
+
+        .mobile-menu-btn {
+          display: block;
+        }
+
+        .summary-cards {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .admin-header h1 {
+          font-size: 1.3rem;
+        }
+
+        .logout-btn {
+          padding: 6px 12px;
+          font-size: 0.9rem;
+        }
+
+        .section-title {
+          font-size: 1.3rem;
+        }
+
+        .summary-card p {
+          font-size: 1.5rem;
+        }
+
+        .form-actions {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .admin-header {
+          padding: 0.8rem;
+        }
+
+        .admin-header h1 {
+          font-size: 1.1rem;
+        }
+
+        .admin-content {
+          padding: 15px 10px;
+        }
+
+        .summary-cards {
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+        }
+
+        .summary-card {
+          padding: 15px;
+        }
+
+        .summary-card h3 {
+          font-size: 0.85rem;
+        }
+
+        .summary-card p {
+          font-size: 1.3rem;
+        }
+
+        .data-table th,
+        .data-table td {
+          padding: 12px 8px;
+          font-size: 0.85rem;
+        }
+
+        .action-btn {
+          padding: 6px 8px;
+          font-size: 0.8rem;
+        }
+
+        .management-form {
+          padding: 15px;
         }
 
         .form-row {
           grid-template-columns: 1fr;
+          gap: 15px;
         }
       }
     </style>
-    <!-- Iconos (usando Font Awesome) -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
   </head>
   <body>
     <!-- Header -->
     <header class="admin-header">
+      <button class="mobile-menu-btn" id="menuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
       <h1><i class="fas fa-crown"></i> Panel de Administración</h1>
-      <button class="logout-btn">
+      <button class="logout-btn" id="logoutBtn">
         <i class="fas fa-sign-out-alt"></i> Cerrar sesión
       </button>
     </header>
@@ -275,7 +470,7 @@
     <!-- Contenedor principal -->
     <div class="admin-container">
       <!-- Sidebar -->
-      <nav class="admin-sidebar">
+      <nav class="admin-sidebar" id="sidebar">
         <ul class="admin-menu">
           <li>
             <a href="#" class="active"
@@ -289,13 +484,16 @@
             <a href="#"><i class="fas fa-calendar-check"></i> Eventos</a>
           </li>
           <li>
-            <a href="#"><i class="fas fa-candy-cane"></i> Gomitas</a>
+            <a href="#"><i class="fas fa-candy-cane"></i> Productos</a>
           </li>
           <li>
             <a href="#"><i class="fas fa-box-open"></i> Empaques</a>
           </li>
           <li>
             <a href="#"><i class="fas fa-users"></i> Clientes</a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-file-invoice-dollar"></i> Facturas</a>
           </li>
           <li>
             <a href="#"><i class="fas fa-cog"></i> Configuración</a>
@@ -305,7 +503,7 @@
 
       <!-- Contenido principal -->
       <main class="admin-content">
-        <h2><i class="fas fa-tachometer-alt"></i> Resumen General</h2>
+        <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Resumen General</h2>
 
         <!-- Tarjetas resumen -->
         <div class="summary-cards">
@@ -328,73 +526,83 @@
         </div>
 
         <!-- Tabla de pedidos recientes -->
-        <h3><i class="fas fa-clock"></i> Pedidos Recientes</h3>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Cliente</th>
-              <th>Productos</th>
-              <th>Total</th>
-              <th>Fecha</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>#SL-1001</td>
-              <td>María González</td>
-              <td>Panditas (200g), Aros (300g)</td>
-              <td>$89.00</td>
-              <td>15/05/2023</td>
-              <td><span class="status status-pending">Pendiente</span></td>
-              <td>
-                <button class="action-btn btn-edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="action-btn btn-complete">
-                  <i class="fas fa-check"></i>
-                </button>
-                <button class="action-btn btn-cancel">
-                  <i class="fas fa-times"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>#SL-1000</td>
-              <td>Carlos Martínez</td>
-              <td>Xtreme (500g), Vasitos</td>
-              <td>$145.00</td>
-              <td>14/05/2023</td>
-              <td><span class="status status-completed">Completado</span></td>
-              <td>
-                <button class="action-btn btn-edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>#SL-0999</td>
-              <td>Ana Sánchez</td>
-              <td>Sin azúcar (400g), Bolsitas</td>
-              <td>$120.00</td>
-              <td>13/05/2023</td>
-              <td><span class="status status-cancelled">Cancelado</span></td>
-              <td>
-                <button class="action-btn btn-edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <h3 class="section-title"><i class="fas fa-clock"></i> Pedidos Recientes</h3>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Productos</th>
+                <th>Total</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#SL-1001</td>
+                <td>María González</td>
+                <td>Panditas (200g), Aros (300g)</td>
+                <td>$89.00</td>
+                <td>15/05/2023</td>
+                <td><span class="status status-pending">Pendiente</span></td>
+                <td>
+                  <button class="action-btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="action-btn btn-complete">
+                    <i class="fas fa-check"></i> Completar
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>#SL-1000</td>
+                <td>Carlos Martínez</td>
+                <td>Xtreme (500g), Vasitos</td>
+                <td>$145.00</td>
+                <td>14/05/2023</td>
+                <td><span class="status status-completed">Completado</span></td>
+                <td>
+                  <button class="action-btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>#SL-0999</td>
+                <td>Ana Sánchez</td>
+                <td>Sin azúcar (400g), Bolsitas</td>
+                <td>$120.00</td>
+                <td>13/05/2023</td>
+                <td><span class="status status-cancelled">Cancelado</span></td>
+                <td>
+                  <button class="action-btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>#SL-0998</td>
+                <td>Luis Rodríguez</td>
+                <td>Mezcla Especial (1kg), Caja</td>
+                <td>$210.00</td>
+                <td>12/05/2023</td>
+                <td><span class="status status-completed">Completado</span></td>
+                <td>
+                  <button class="action-btn btn-edit">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <!-- Gestión de productos -->
-        <h3 style="margin-top: 40px">
-          <i class="fas fa-candy-cane"></i> Agregar Nuevo Producto
-        </h3>
-        <form class="management-form">
+        <h3 class="section-title"><i class="fas fa-candy-cane"></i> Agregar Nuevo Producto</h3>
+        <form class="management-form" id="productForm">
           <div class="form-row">
             <div class="form-group">
               <label for="product-name">Nombre del producto:</label>
@@ -424,7 +632,8 @@
             </div>
             <div class="form-group">
               <label for="product-category">Categoría:</label>
-              <select id="product-category">
+              <select id="product-category" required>
+                <option value="">Seleccionar</option>
                 <option value="gomitas">Gomitas</option>
                 <option value="empagues">Empaques</option>
                 <option value="especiales">Productos especiales</option>
@@ -433,48 +642,61 @@
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn-secondary">Cancelar</button>
-            <button type="submit" class="btn-primary">Guardar Producto</button>
+            <button type="button" class="btn btn-secondary" id="cancelBtn">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i> Guardar Producto
+            </button>
           </div>
         </form>
       </main>
     </div>
 
     <script>
-      // Simulación de datos
-      document.querySelector(".logout-btn").addEventListener("click", () => {
-        if (confirm("¿Estás seguro de cerrar sesión?")) {
-          window.location.href = "index.html";
+      // Menú móvil
+      const menuBtn = document.getElementById('menuBtn');
+      const sidebar = document.getElementById('sidebar');
+      
+      menuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+      });
+
+      // Cerrar sesión
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        if (confirm('¿Estás seguro de cerrar sesión?')) {
+          window.location.href = 'index.html';
         }
       });
 
       // Cambiar estado de pedidos
-      document.querySelectorAll(".btn-complete").forEach((btn) => {
-        btn.addEventListener("click", function () {
-          const row = this.closest("tr");
-          row.querySelector(".status").className = "status status-completed";
-          row.querySelector(".status").textContent = "Completado";
-          alert("Pedido marcado como completado");
+      document.querySelectorAll('.btn-complete').forEach((btn) => {
+        btn.addEventListener('click', function() {
+          const row = this.closest('tr');
+          row.querySelector('.status').className = 'status status-completed';
+          row.querySelector('.status').textContent = 'Completado';
+          this.remove();
+          alert('Pedido marcado como completado');
         });
       });
 
-      document.querySelectorAll(".btn-cancel").forEach((btn) => {
-        btn.addEventListener("click", function () {
-          const row = this.closest("tr");
-          row.querySelector(".status").className = "status status-cancelled";
-          row.querySelector(".status").textContent = "Cancelado";
-          alert("Pedido marcado como cancelado");
-        });
+      // Formulario de producto
+      document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Producto guardado exitosamente');
+        this.reset();
       });
 
-      // Gestión de productos
-      document
-        .querySelector(".management-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          alert("Producto guardado exitosamente");
-          this.reset();
-        });
+      document.getElementById('cancelBtn').addEventListener('click', function() {
+        document.getElementById('productForm').reset();
+      });
+
+      // Cerrar menú al hacer clic fuera en móviles
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 1024 && !sidebar.contains(e.target) && e.target !== menuBtn) {
+          sidebar.classList.remove('active');
+        }
+      });
     </script>
   </body>
 </html>
