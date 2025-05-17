@@ -69,41 +69,55 @@
       .main-buttons {
         display: flex;
         justify-content: center;
-        gap: 1rem;
-        margin: 2rem auto;
+        gap: 2rem;
+        margin: 3rem auto;
         flex-wrap: wrap;
         max-width: 800px;
         padding: 0 1rem;
       }
 
       .btn {
-        padding: 0.8rem 1.5rem;
+        padding: 1.2rem 2rem;
         border: none;
         border-radius: 50px;
         font-weight: bold;
         cursor: pointer;
         transition: all 0.3s ease;
-        font-size: 1rem;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        min-width: 280px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       }
 
       .btn-primary {
         background-color: var(--amarillo);
         color: var(--negro);
+        border: 2px solid var(--amarillo);
       }
 
       .btn-secondary {
         background-color: var(--morado);
         color: var(--blanco);
+        border: 2px solid var(--morado);
       }
 
       .btn-tertiary {
         background-color: var(--verde);
         color: var(--blanco);
+        border: 2px solid var(--verde);
       }
 
       .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        opacity: 0.9;
+      }
+
+      .btn:active {
+        transform: translateY(-2px);
       }
 
       .fixed-buttons {
@@ -287,11 +301,15 @@
         .main-buttons {
           flex-direction: column;
           align-items: center;
+          gap: 1.5rem;
+          margin: 2.5rem auto;
         }
 
         .btn {
-          width: 90%;
+          width: 100%;
           max-width: 300px;
+          padding: 1rem 1.5rem;
+          font-size: 1rem;
         }
 
         .order-card .btn {
@@ -322,6 +340,16 @@
           height: 45px;
           font-size: 1.1rem;
         }
+        
+        .main-buttons {
+          margin: 2rem auto;
+          gap: 1.2rem;
+        }
+        
+        .btn {
+          min-width: auto;
+          width: 90%;
+        }
       }
     </style>
   </head>
@@ -344,9 +372,11 @@
       <div class="page active" id="home">
         <div class="main-buttons">
           <button class="btn btn-primary" id="startOrder">
-            Iniciar un pedido o servicio
+            <i class="fas fa-shopping-cart"></i> Iniciar un pedido o servicio
           </button>
-          <button class="btn btn-secondary" id="aboutUs">¿Quiénes somos?</button>
+          <button class="btn btn-secondary" id="aboutUs">
+            <i class="fas fa-users"></i> ¿Quiénes somos?
+          </button>
         </div>
       </div>
 
@@ -535,5 +565,4 @@
         });
     </script>
   </body>
-</html>
 </html>
